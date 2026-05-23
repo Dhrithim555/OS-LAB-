@@ -1,0 +1,58 @@
+include<stdio.h>
+
+int main(){
+int n,i,j,t,p[10],e[10],r[10]={0},d[10];
+float u=0;
+
+printf("===== Earliest Deadline First (EDF) Scheduling =====\n");
+
+printf("Enter number of processes: ");
+scanf("%d",&n);
+
+for(i=0;i<n;i++){
+printf("Enter Period and Execution Time of Process P%d: ",i+1);
+scanf("%d%d",&p[i],&e[i]);
+
+u+=(float)e[i]/p[i];
+d[i]=p[i];
+}
+
+printf("\nProcess Details:\n");
+printf("Process\tPeriod\tExecution Time\n");
+
+for(i=0;i<n;i++)
+printf("P%d\t%d\t%d\n",i+1,p[i],e[i]);
+
+printf("\nCPU Utilization = %.2f\n",u);
+
+if(u<=1)
+printf("Schedulability Test Result: Processes are Schedulable under EDF\n");
+else
+printf("Schedulability Test Result: Processes are NOT Schedulable under EDF\n");
+
+printf("\n===== Scheduling Sequence =====\n");
+printf("Time\tRunning Process\n");
+
+for(t=0;t<20;t++){
+
+for(i=0;i<n;i++)
+if(t%p[i]==0){
+r[i]=e[i];
+d[i]=t+p[i];
+}
+
+for(i=0;i<n && !r[i];i++);
+
+for(j=i+1;j<n;j++)
+if(r[j] && d[j]<d[i]) i=j;
+
+printf("%2d\t",t);
+
+if(i<n){
+printf("P%d\n",i+1);
+r[i]--;
+}
+else
+printf("Idle\n");
+}
+}
