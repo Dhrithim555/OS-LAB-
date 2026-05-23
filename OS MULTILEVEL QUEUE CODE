@@ -1,0 +1,51 @@
+#include <stdio.h>
+
+struct Process {
+    int id, at, bt, ct, tat, wt, type;
+};
+void fcfs(struct Process p[], int n, int start_time) {
+    int time = start_time;
+
+    for (int i = 0; i < n; i++) {
+        if (time < p[i].at)
+            time = p[i].at;
+        time += p[i].bt;
+        p[i].ct = time;
+        p[i].tat = p[i].ct - p[i].at;
+        p[i].wt = p[i].tat - p[i].bt;
+    }
+}
+int main() {
+    int n;
+    printf("Enter total number of processes: ");
+    scanf("%d", &n);
+    struct Process p[n], sys[n], user[n];
+    int sc = 0, uc = 0;
+    for (int i = 0; i < n; i++) {
+        p[i].id = i + 1;
+        printf("P%d AT BT Type(0=System,1=User): ", p[i].id);
+        scanf("%d %d %d", &p[i].at, &p[i].bt, &p[i].type);
+        if (p[i].type == 0)
+            sys[sc++] = p[i];
+        else
+            user[uc++] = p[i];
+    }
+    fcfs(sys, sc, 0);
+    int last_time = (sc > 0) ? sys[sc - 1].ct : 0;
+    fcfs(user, uc, last_time);
+    printf("\n--- System Processes ---\n");
+    printf("ID\tAT\tBT\tCT\tTAT\tWT\n");
+    for (int i = 0; i < sc; i++) {
+        printf("P%d\t%d\t%d\t%d\t%d\t%d\n",
+               sys[i].id, sys[i].at, sys[i].bt,
+               sys[i].ct, sys[i].tat, sys[i].wt);
+    }
+    printf("\n--- User Processes ---\n");
+    printf("ID\tAT\tBT\tCT\tTAT\tWT\n");
+    for (int i = 0; i < uc; i++) {
+        printf("P%d\t%d\t%d\t%d\t%d\t%d\n",
+               user[i].id, user[i].at, user[i].bt,
+               user[i].ct, user[i].tat, user[i].wt);
+    }
+    return 0;
+}
