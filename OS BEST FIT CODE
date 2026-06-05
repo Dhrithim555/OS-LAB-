@@ -1,0 +1,34 @@
+#include <stdio.h>
+
+int main() {
+    int b[10], p[10], nb, np, i, j, min, idx;
+
+    printf("Enter number of blocks: ");
+    scanf("%d", &nb);
+    for(i = 0; i < nb; i++) scanf("%d", &b[i]);
+
+    printf("Enter number of processes: ");
+    scanf("%d", &np);
+    for(i = 0; i < np; i++) scanf("%d", &p[i]);
+
+    printf("\nProcess\tSize\tBlock\n");
+
+    for(i = 0; i < np; i++) {
+        min = 9999;
+        idx = -1;
+
+        for(j = 0; j < nb; j++)
+            if(b[j] >= p[i] && b[j] < min) {
+                min = b[j];
+                idx = j;
+            }
+
+        if(idx != -1) {
+            printf("P%d\t%d\tB%d\n", i + 1, p[i], idx + 1);
+            b[idx] -= p[i];
+        } else
+            printf("P%d\t%d\tNot Allocated\n", i + 1, p[i]);
+    }
+
+    return 0;
+}
