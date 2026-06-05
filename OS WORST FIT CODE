@@ -1,0 +1,43 @@
+#include <stdio.h>
+
+int main() {
+    int b[10], p[10], nb, np, i, j, max, idx;
+
+    printf("Enter number of memory blocks: ");
+    scanf("%d", &nb);
+
+    printf("Enter sizes of memory blocks:\n");
+    for(i = 0; i < nb; i++)
+        scanf("%d", &b[i]);
+
+    printf("Enter number of processes: ");
+    scanf("%d", &np);
+
+    printf("Enter sizes of processes:\n");
+    for(i = 0; i < np; i++)
+        scanf("%d", &p[i]);
+
+    printf("\n--- Worst Fit Allocation ---\n");
+    printf("Process\tSize\tBlock Allocated\n");
+
+    for(i = 0; i < np; i++) {
+        max = -1;
+        idx = -1;
+
+        for(j = 0; j < nb; j++) {
+            if(b[j] >= p[i] && b[j] > max) {
+                max = b[j];
+                idx = j;
+            }
+        }
+
+        if(idx != -1) {
+            printf("P%d\t%d\tBlock %d\n", i + 1, p[i], idx + 1);
+            b[idx] -= p[i];
+        } else {
+            printf("P%d\t%d\tNot Allocated\n", i + 1, p[i]);
+        }
+    }
+
+    return 0;
+}
